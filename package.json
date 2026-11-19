@@ -1,0 +1,9 @@
+{
+  "name": "yellowhale-server",
+  "version": "1.0.0",
+  "description": "YellowHale AI server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
