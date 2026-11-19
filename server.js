@@ -74,9 +74,15 @@ const server = http.createServer(async (req, res) => {
       return res.end(JSON.stringify({ error: "Error al consultar la IA" }));
     }
 
-    res.end(JSON.stringify({
-      answer: result.output_text || "No se obtuvo una respuesta."
-    }));
+    const answer = (result.output || [])
+  .flatMap(item => item.content || [])
+  .filter(part => part.type === "output_text")
+  .map(part => part.text)
+  .join("\n");
+
+res.end(JSON.stringify({
+  answer: answer || "No se obtuvo una respuesta."
+}));
 
   } catch (error) {
     res.writeHead(500);
