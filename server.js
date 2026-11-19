@@ -106,10 +106,18 @@ const server = http.createServer(async (req, res) => {
 
     const answer = solve(data.question);
 
-    return res.end(JSON.stringify({
-      found: answer !== null,
-      answer: answer || "No conozco todavía esa respuesta."
-    }));
+    const cleanAnswer = answer
+  ? answer
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+  : "NOSE";
+
+return res.end(JSON.stringify({
+  found: answer !== null,
+  answer: cleanAnswer
+}));
 
   } catch (error) {
     res.writeHead(400);
